@@ -53,6 +53,18 @@ func (imc *InMemoryCsv) NumColumns() int {
 	return len(imc.header)
 }
 
+func (imc *InMemoryCsv) Columns() []string {
+	return imc.header
+}
+
+func (imc *InMemoryCsv) Rows() [][]string {
+	return imc.rows
+}
+
+func (imc *InMemoryCsv) Row(index int) []string {
+	return imc.rows[index]
+}
+
 func (imc *InMemoryCsv) GetRowIndicesMatchingIndexedColumn(value string) []int {
 	indices, ok := imc.index[value]
 	if ok {
@@ -127,8 +139,8 @@ func (imc *InMemoryCsv) SortRows(columnIndices []int, columnTypes []ColumnType, 
 					return false
 				}
 			} else if columnType == DATE_TYPE {
-				row1Val := ParseDateOrPanic(row1[columnIndex])
-				row2Val := ParseDateOrPanic(row2[columnIndex])
+				_, row1Val := ParseDateOrPanic(row1[columnIndex])
+				_, row2Val := ParseDateOrPanic(row2[columnIndex])
 				if row1Val.Before(row2Val) {
 					return true
 				} else if row1Val.After(row2Val) {
@@ -519,7 +531,7 @@ func (imc *InMemoryCsv) PrintStatsForColumnAsDate(columnIndex int) {
 	i := 0
 	for _, row := range imc.rows {
 		if !IsNullType(row[columnIndex]) {
-			dateArray[i] = ParseDateOrPanic(row[columnIndex])
+			_, dateArray[i] = ParseDateOrPanic(row[columnIndex])
 			i++
 		}
 	}

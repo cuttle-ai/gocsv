@@ -90,12 +90,12 @@ func (sub *FilterSubcommand) RunFilter(inputCsv *InputCsv, outputCsvWriter Outpu
 				return elem64 > gt
 			}
 		} else if IsDateType(sub.gtStr) {
-			gt, err := ParseDate(sub.gtStr)
+			_, gt, err := ParseDate(sub.gtStr)
 			if err != nil {
 				ExitWithError(err)
 			}
 			matchFunc = func(elem string) bool {
-				elemDate, err := ParseDate(elem)
+				_, elemDate, err := ParseDate(elem)
 				if err != nil {
 					return false
 				}
@@ -118,12 +118,12 @@ func (sub *FilterSubcommand) RunFilter(inputCsv *InputCsv, outputCsvWriter Outpu
 				return elem64 >= gte
 			}
 		} else if IsDateType(sub.gteStr) {
-			gte, err := ParseDate(sub.gteStr)
+			_, gte, err := ParseDate(sub.gteStr)
 			if err != nil {
 				ExitWithError(err)
 			}
 			matchFunc = func(elem string) bool {
-				elemDate, err := ParseDate(elem)
+				_, elemDate, err := ParseDate(elem)
 				if err != nil {
 					return false
 				}
@@ -146,12 +146,12 @@ func (sub *FilterSubcommand) RunFilter(inputCsv *InputCsv, outputCsvWriter Outpu
 				return elem64 < lt
 			}
 		} else if IsDateType(sub.ltStr) {
-			lt, err := ParseDate(sub.ltStr)
+			_, lt, err := ParseDate(sub.ltStr)
 			if err != nil {
 				ExitWithError(err)
 			}
 			matchFunc = func(elem string) bool {
-				elemDate, err := ParseDate(elem)
+				_, elemDate, err := ParseDate(elem)
 				if err != nil {
 					return false
 				}
@@ -174,12 +174,12 @@ func (sub *FilterSubcommand) RunFilter(inputCsv *InputCsv, outputCsvWriter Outpu
 				return elem64 <= lte
 			}
 		} else if IsDateType(sub.lteStr) {
-			lte, err := ParseDate(sub.lteStr)
+			_, lte, err := ParseDate(sub.lteStr)
 			if err != nil {
 				ExitWithError(err)
 			}
 			matchFunc = func(elem string) bool {
-				elemDate, err := ParseDate(elem)
+				_, elemDate, err := ParseDate(elem)
 				if err != nil {
 					return false
 				}

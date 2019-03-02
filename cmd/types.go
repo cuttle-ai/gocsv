@@ -20,6 +20,16 @@ const (
 	STRING_TYPE
 )
 
+var DateTypePatterns = map[string]string{
+	"2006-01-02": "YYYY-MM-DD",
+	"2006-1-2":   "YYYY-MM-DD",
+	"1/2/2006":   "MM/DD/YYYY",
+	"01/02/2006": "MM/DD/YYYY",
+	"01-02-2006": "MM-DD-YYYY",
+	"2-1-2006":   "DD-MM-YYYY",
+	"02-01-2006": "DD-MM-YYYY",
+}
+
 func ColumnTypeToString(columnType ColumnType) string {
 	if columnType == NULL_TYPE {
 		return "null"
@@ -107,7 +117,7 @@ func IsDatetimeType(elem string) bool {
 }
 
 func IsDateType(elem string) bool {
-	_, err := ParseDate(elem)
+	_, _, err := ParseDate(elem)
 	return err == nil
 }
 
@@ -140,28 +150,23 @@ func ParseDatetime(elem string) (time.Time, error) {
 	return time.Time{}, errors.New("Invalid Date string")
 }
 
-func ParseDateOrPanic(elem string) time.Time {
-	t, err := ParseDate(elem)
+func ParseDateOrPanic(elem string) (string, time.Time) {
+	f, t, err := ParseDate(elem)
 	if err != nil {
 		ExitWithError(err)
 	}
-	return t
+	return f, t
 }
 
-func ParseDate(elem string) (time.Time, error) {
-	patterns := []string{
-		"2006-01-02",
-		"2006-1-2",
-		"1/2/2006",
-		"01/02/2006",
-	}
-	for _, pattern := range patterns {
+func ParseDate(elem string) (string, time.Time, error) {
+	patterns := DateTypePatterns
+	for pattern, format := range patterns {
 		t, err := time.Parse(pattern, elem)
 		if err == nil {
-			return t, nil
+			return format, t, nil
 		}
 	}
-	return time.Time{}, errors.New("Invalid Date string")
+	return "", time.Time{}, errors.New("Invalid Date string")
 }
 
 func ParseFloat64OrPanic(strVal string) float64 {
